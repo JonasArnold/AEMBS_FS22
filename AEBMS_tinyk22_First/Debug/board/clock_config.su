@@ -1,0 +1,4 @@
+C:\Users\jonas\Documents\MCUXpressoIDE_11.5.0_7232\workspace\AEBMS_tinyk22_First\drivers/fsl_clock.h:842:20:CLOCK_SetSimSafeDivs	4	static
+../board/clock_config.c:77:13:CLOCK_CONFIG_FllStableDelay	16	static
+../board/clock_config.c:89:6:BOARD_InitBootClocks	8	static
+../board/clock_config.c:155:6:BOARD_BootClockRUN	8	static

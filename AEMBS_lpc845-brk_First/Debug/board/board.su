@@ -1,0 +1,2 @@
+C:\Users\jonas\Documents\MCUXpressoIDE_11.5.0_7232\workspace\AEMBS_lpc845-brk_First\drivers/fsl_clock.h:580:20:CLOCK_Select	16	static
+../board/board.c:25:10:BOARD_InitDebugConsole	16	static
