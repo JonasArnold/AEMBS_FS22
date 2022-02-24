@@ -1,1 +1,4 @@
 Workspace/
+[Dd]ebug/
+.settings/
+*.launch
