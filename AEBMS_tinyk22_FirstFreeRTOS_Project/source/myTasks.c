@@ -19,7 +19,9 @@ static void myTask(void *pv)
 	printf("myTask param is %d\n", (int)param);
 	for(;;)
 	{
+		taskDISABLE_INTERRUPTS();
 		__asm volatile("nop");
+		taskENABLE_INTERRUPTS();
 	}
 }
 
@@ -50,6 +52,5 @@ void MyTasks_Init(void)
 		for(;;) {} // Endless loop
 	}
 
-	vTaskStartScheduler(); // start OS
-	/* does not get here */
+	// vTaskStartScheduler is being called in main
 }

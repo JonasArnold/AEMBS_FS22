@@ -39,8 +39,10 @@
 #include "clock_config.h"
 #include "MK22F51212.h"
 #include "fsl_debug_console.h"
-#include "myTasks.h"
 /* TODO: insert other include files here. */
+#include "myTasks.h"
+#include "myLedTask.h"
+#include "McuRTOS.h"
 
 /* TODO: insert other definitions and declarations here. */
 
@@ -60,7 +62,12 @@ int main(void) {
 
     printf("Hello World\n");
 
-    MyTasks_Init();   /* creates tasks and runs scheduler */
+    MyTasks_Init();   /* creates some tasks */
+    MyLedTask_Init(); /* creates led task */
+
+    printf("Tasks created");
+
+    vTaskStartScheduler();
     /* end => nothing else is called from here */
 
     return 0 ;
