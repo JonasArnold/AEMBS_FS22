@@ -8,6 +8,7 @@
 #include "McuRTOS.h"
 #include <stdint.h>
 #include "leds.h"
+#include "McuSystemView.h"
 
 LEDS_Leds_e chosenLed = LEDS_RED;
 
@@ -19,7 +20,12 @@ static void ledTask(void *pv)
 	LEDS_Leds_e led = *(LEDS_Leds_e*)pv;
 	for(;;)
 	{
+
+		#define MCU_SYSTEM_VIEW_USER_ID_LED_BLINK 11
+	    McuSystemView_OnUserStart(MCU_SYSTEM_VIEW_USER_ID_LED_BLINK);
 		LEDS_Neg(led);
+	    McuSystemView_OnUserStop(MCU_SYSTEM_VIEW_USER_ID_LED_BLINK);
+
 		vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(100));
 	}
 }

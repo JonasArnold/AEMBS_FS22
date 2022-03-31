@@ -43,6 +43,10 @@
 #include "myTasks.h"
 #include "myLedTask.h"
 #include "McuRTOS.h"
+#include "mySystemView.h"
+#include "buttons.h"
+#include "debounce.h"
+
 
 /* TODO: insert other definitions and declarations here. */
 
@@ -65,7 +69,15 @@ int main(void) {
     MyTasks_Init();   /* creates some tasks */
     MyLedTask_Init(); /* creates led task */
 
-    printf("Tasks created");
+    printf("Tasks created\n");
+
+    printf("System Viewer initialization\n");
+    mySystemView_Init();
+
+    printf("Mcu Debounce initialization\n");
+    McuRTOS_Init();
+    BTN_Init();
+    Debounce_Init();
 
     vTaskStartScheduler();
     /* end => nothing else is called from here */

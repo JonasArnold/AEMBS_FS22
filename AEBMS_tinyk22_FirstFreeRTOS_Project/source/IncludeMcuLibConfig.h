@@ -96,7 +96,7 @@ add_compile_options(-include "../config/IncludeMcuLibConfig.h")
 #endif
 /* ------------------- RTOS ---------------------------*/
 #define McuLib_CONFIG_SDK_USE_FREERTOS       (1)
-/* #define configUSE_SEGGER_SYSTEM_VIEWER_HOOKS (1) */
+#define configUSE_SEGGER_SYSTEM_VIEWER_HOOKS (1)
 /* #define configTOTAL_HEAP_SIZE                (24*1024) */
 /* #define configUSE_HEAP_SECTION_NAME          (1) */
 /* #define configHEAP_SECTION_NAME_STRING       ".bss.$SRAM_LOWER.FreeRTOS" */

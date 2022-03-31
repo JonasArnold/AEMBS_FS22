@@ -22,6 +22,7 @@ static void myTask(void *pv)
 		taskDISABLE_INTERRUPTS();
 		__asm volatile("nop");
 		taskENABLE_INTERRUPTS();
+		vTaskDelay(pdMS_TO_TICKS(100));
 	}
 }
 
