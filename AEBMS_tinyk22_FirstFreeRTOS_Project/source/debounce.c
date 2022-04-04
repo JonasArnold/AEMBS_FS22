@@ -11,6 +11,7 @@
 #if configUSE_SEGGER_SYSTEM_VIEWER_HOOKS
   #include "McuSystemView.h"
 #endif
+#include "Invader.h"
 
 static void OnDebounceEvent(McuDbnc_EventKinds event, uint32_t buttons);
 
@@ -34,11 +35,41 @@ static void OnDebounceEvent(McuDbnc_EventKinds event, uint32_t buttons) {
 #if configUSE_SEGGER_SYSTEM_VIEWER_HOOKS
       SEGGER_SYSVIEW_PrintfTarget("pressed, buttons %d:\n", buttons);
 #endif
+      if (buttons&BTN_BIT_NAV_LEFT) {
+		  Invader_SendEvent(Invader_Button_Left_Pressed);
+      }
+	  if (buttons&BTN_BIT_NAV_RIGHT) {
+		  Invader_SendEvent(Invader_Button_Right_Pressed);
+	  }
+	  if (buttons&BTN_BIT_NAV_UP) {
+		  Invader_SendEvent(Invader_Button_Up_Pressed);
+	  }
+	  if (buttons&BTN_BIT_NAV_DOWN) {
+		  Invader_SendEvent(Invader_Button_Down_Pressed);
+	  }
+	  if (buttons&BTN_BIT_NAV_CENTER) {
+		  Invader_SendEvent(Invader_Button_Center_Pressed);
+	  }
       break;
     case MCUDBNC_EVENT_PRESSED_REPEAT:
 #if configUSE_SEGGER_SYSTEM_VIEWER_HOOKS
       SEGGER_SYSVIEW_PrintfTarget("pressed repeat, buttons %d:\n", buttons);
 #endif
+      if (buttons&BTN_BIT_NAV_LEFT) {
+    	  Invader_SendEvent(Invader_Button_LeftRepeat_Pressed);
+      }
+      if (buttons&BTN_BIT_NAV_RIGHT) {
+    	  Invader_SendEvent(Invader_Button_RightRepeat_Pressed);
+      }
+      if (buttons&BTN_BIT_NAV_UP) {
+    	  Invader_SendEvent(Invader_Button_UpRepeat_Pressed);
+      }
+      if (buttons&BTN_BIT_NAV_DOWN) {
+    	  Invader_SendEvent(Invader_Button_DownRepeat_Pressed);
+      }
+      if (buttons&BTN_BIT_NAV_CENTER) {
+    	  Invader_SendEvent(Invader_Button_CenterRepeat_Pressed);
+      }
      break;
 
     case MCUDBNC_EVENT_LONG_PRESSED:
@@ -56,11 +87,21 @@ static void OnDebounceEvent(McuDbnc_EventKinds event, uint32_t buttons) {
 #if configUSE_SEGGER_SYSTEM_VIEWER_HOOKS
       SEGGER_SYSVIEW_PrintfTarget("released, buttons %d:\n", buttons);
 
-#define MCU_SYSTEM_VIEW_USER_ID_PRINTF (10)
-
-      McuSystemView_OnUserStart(MCU_SYSTEM_VIEW_USER_ID_PRINTF);
-      printf("Test");
-      McuSystemView_OnUserStop(MCU_SYSTEM_VIEW_USER_ID_PRINTF);
+      if (buttons&BTN_BIT_NAV_LEFT) {
+    	  Invader_SendEvent(Invader_Button_Left_Released);
+      }
+      if (buttons&BTN_BIT_NAV_RIGHT) {
+    	  Invader_SendEvent(Invader_Button_Right_Released);
+      }
+      if (buttons&BTN_BIT_NAV_UP) {
+    	  Invader_SendEvent(Invader_Button_Up_Released);
+      }
+      if (buttons&BTN_BIT_NAV_DOWN) {
+    	  Invader_SendEvent(Invader_Button_Down_Released);
+      }
+      if (buttons&BTN_BIT_NAV_CENTER) {
+    	  Invader_SendEvent(Invader_Button_Center_Released);
+      }
 
 #endif
       break;

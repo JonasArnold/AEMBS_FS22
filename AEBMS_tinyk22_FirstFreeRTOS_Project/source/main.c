@@ -40,13 +40,14 @@
 #include "MK22F51212.h"
 #include "fsl_debug_console.h"
 /* TODO: insert other include files here. */
+#include "leds.h"
 #include "myTasks.h"
 #include "myLedTask.h"
 #include "McuRTOS.h"
 #include "mySystemView.h"
 #include "buttons.h"
 #include "debounce.h"
-
+#include "Invader.h"
 
 /* TODO: insert other definitions and declarations here. */
 
@@ -65,9 +66,10 @@ int main(void) {
 #endif
 
     printf("Hello World\n");
+    LEDS_Init();
 
-    MyTasks_Init();   /* creates some tasks */
-    MyLedTask_Init(); /* creates led task */
+    //MyTasks_Init();   /* creates some tasks */
+    //MyLedTask_Init(); /* creates led task */
 
     printf("Tasks created\n");
 
@@ -78,6 +80,9 @@ int main(void) {
     McuRTOS_Init();
     BTN_Init();
     Debounce_Init();
+
+    printf("Invader initialization\n");
+    Invader_Init();
 
     vTaskStartScheduler();
     /* end => nothing else is called from here */

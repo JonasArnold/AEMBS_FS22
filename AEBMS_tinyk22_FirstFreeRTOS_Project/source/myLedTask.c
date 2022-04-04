@@ -33,7 +33,7 @@ static void ledTask(void *pv)
 void MyLedTask_Init(void)
 {
     // configure leds
-    LEDS_Init();
+    //LEDS_Init();
 
 	BaseType_t res;
 	res = xTaskCreate(	ledTask,
