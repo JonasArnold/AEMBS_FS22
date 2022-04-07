@@ -102,9 +102,9 @@ static void gameTask(void *pv)
 				case Invader_Button_DownRepeat_Pressed: break;
 				case Invader_Button_Down_Released: LEDS_Off(LEDS_TINY_BLUE); break;
 
-				case Invader_Button_Center_Pressed: LEDS_On(LEDS_RED); LEDS_On(LEDS_GREEN); break;
+				case Invader_Button_Center_Pressed: LEDS_On(LEDS_BLUE); break;
 				case Invader_Button_CenterRepeat_Pressed: break;
-				case Invader_Button_Center_Released: LEDS_Off(LEDS_RED); LEDS_Off(LEDS_GREEN); break;
+				case Invader_Button_Center_Released: LEDS_Off(LEDS_BLUE); break;
 				default: break;
 			}
 		}
