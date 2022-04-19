@@ -8,6 +8,8 @@
 #ifndef INVADER_H_
 #define INVADER_H_
 
+#include "McuRTOS.h"
+
 typedef enum Invader_event_e {
   Invader_Event_None,
 
@@ -47,9 +49,9 @@ void Invader_Init(void);
 void Invader_Deinit(void);
 
 /*!
- * \brief Used to notify game task about a button event from the debouncing
- * \param event Event from the list of possible events
+ * \brief Register event queue handle for the game.
  */
-void Invader_SendEvent(Invader_event_e event);
+void Invader_RegisterEventQueueHandle(QueueHandle_t handle);
+
 
 #endif /* INVADER_H_ */

@@ -16,7 +16,10 @@
 static void OnDebounceEvent(McuDbnc_EventKinds event, uint32_t buttons);
 
 #define TIMER_PERIOD_MS  20 /* frequency of debouncing timer */
+#define EVENT_QUEUE_LENGTH		(5) /* number of elements in queue */
+#define EVENT_QUEUE_ELEM_SIZE	(sizeof(Invader_event_e))  /* size of a queue item */
 
+static QueueHandle_t eventQueue;  /* queue handle */
 static McuDbnc_Desc_t data =
 {
   .state = MCUDBMC_STATE_IDLE,  /* state of state machine */
@@ -29,6 +32,12 @@ static McuDbnc_Desc_t data =
   .onDebounceEvent = OnDebounceEvent, /* debounce event handler */
 };
 
+static void vQueueButtonEvent(Invader_event_e btn){
+	if(xQueueSendToBack(eventQueue, &btn, pdMS_TO_TICKS(100)) != pdPASS){
+		printf("Failed adding Button event to eventQueue. Maybe queue is full?");
+	}
+}
+
 static void OnDebounceEvent(McuDbnc_EventKinds event, uint32_t buttons) {
   switch(event) {
     case MCUDBNC_EVENT_PRESSED:
@@ -36,19 +45,19 @@ static void OnDebounceEvent(McuDbnc_EventKinds event, uint32_t buttons) {
       SEGGER_SYSVIEW_PrintfTarget("pressed, buttons %d:\n", buttons);
 #endif
       if (buttons&BTN_BIT_NAV_LEFT) {
-		  Invader_SendEvent(Invader_Button_Left_Pressed);
+    	  vQueueButtonEvent(Invader_Button_Left_Pressed);
       }
 	  if (buttons&BTN_BIT_NAV_RIGHT) {
-		  Invader_SendEvent(Invader_Button_Right_Pressed);
+		  vQueueButtonEvent(Invader_Button_Right_Pressed);
 	  }
 	  if (buttons&BTN_BIT_NAV_UP) {
-		  Invader_SendEvent(Invader_Button_Up_Pressed);
+		  vQueueButtonEvent(Invader_Button_Up_Pressed);
 	  }
 	  if (buttons&BTN_BIT_NAV_DOWN) {
-		  Invader_SendEvent(Invader_Button_Down_Pressed);
+		  vQueueButtonEvent(Invader_Button_Down_Pressed);
 	  }
 	  if (buttons&BTN_BIT_NAV_CENTER) {
-		  Invader_SendEvent(Invader_Button_Center_Pressed);
+		  vQueueButtonEvent(Invader_Button_Center_Pressed);
 	  }
       break;
     case MCUDBNC_EVENT_PRESSED_REPEAT:
@@ -56,19 +65,19 @@ static void OnDebounceEvent(McuDbnc_EventKinds event, uint32_t buttons) {
       SEGGER_SYSVIEW_PrintfTarget("pressed repeat, buttons %d:\n", buttons);
 #endif
       if (buttons&BTN_BIT_NAV_LEFT) {
-    	  Invader_SendEvent(Invader_Button_LeftRepeat_Pressed);
+    	  vQueueButtonEvent(Invader_Button_LeftRepeat_Pressed);
       }
       if (buttons&BTN_BIT_NAV_RIGHT) {
-    	  Invader_SendEvent(Invader_Button_RightRepeat_Pressed);
+    	  vQueueButtonEvent(Invader_Button_RightRepeat_Pressed);
       }
       if (buttons&BTN_BIT_NAV_UP) {
-    	  Invader_SendEvent(Invader_Button_UpRepeat_Pressed);
+    	  vQueueButtonEvent(Invader_Button_UpRepeat_Pressed);
       }
       if (buttons&BTN_BIT_NAV_DOWN) {
-    	  Invader_SendEvent(Invader_Button_DownRepeat_Pressed);
+    	  vQueueButtonEvent(Invader_Button_DownRepeat_Pressed);
       }
       if (buttons&BTN_BIT_NAV_CENTER) {
-    	  Invader_SendEvent(Invader_Button_CenterRepeat_Pressed);
+    	  vQueueButtonEvent(Invader_Button_CenterRepeat_Pressed);
       }
      break;
 
@@ -88,19 +97,19 @@ static void OnDebounceEvent(McuDbnc_EventKinds event, uint32_t buttons) {
       SEGGER_SYSVIEW_PrintfTarget("released, buttons %d:\n", buttons);
 
       if (buttons&BTN_BIT_NAV_LEFT) {
-    	  Invader_SendEvent(Invader_Button_Left_Released);
+    	  vQueueButtonEvent(Invader_Button_Left_Released);
       }
       if (buttons&BTN_BIT_NAV_RIGHT) {
-    	  Invader_SendEvent(Invader_Button_Right_Released);
+    	  vQueueButtonEvent(Invader_Button_Right_Released);
       }
       if (buttons&BTN_BIT_NAV_UP) {
-    	  Invader_SendEvent(Invader_Button_Up_Released);
+    	  vQueueButtonEvent(Invader_Button_Up_Released);
       }
       if (buttons&BTN_BIT_NAV_DOWN) {
-    	  Invader_SendEvent(Invader_Button_Down_Released);
+    	  vQueueButtonEvent(Invader_Button_Down_Released);
       }
       if (buttons&BTN_BIT_NAV_CENTER) {
-    	  Invader_SendEvent(Invader_Button_Center_Released);
+    	  vQueueButtonEvent(Invader_Button_Center_Released);
       }
 
 #endif
@@ -151,14 +160,24 @@ void Debounce_Deinit(void) {
 }
 
 void Debounce_Init(void) {
-  McuDbnc_Init();
-  data.timer = xTimerCreate(
+
+	// initialize debounce and timer
+	McuDbnc_Init();
+    data.timer = xTimerCreate(
         "tmrDbnc", /* name */
         pdMS_TO_TICKS(TIMER_PERIOD_MS), /* period/time */
         pdTRUE, /* auto reload */
         (void*)0, /* timer ID */
         vTimerCallbackDebounce); /* callback */
-  if (data.timer==NULL) {
-    for(;;); /* failure! */
-  }
+    if (data.timer==NULL) {
+    	for(;;); /* failure! */
+    }
+
+    // initialize queue
+    eventQueue = xQueueCreate(EVENT_QUEUE_LENGTH, EVENT_QUEUE_ELEM_SIZE);
+    if(eventQueue == NULL){
+    	for(;;); /* out of memory? */
+    }
+    vQueueAddToRegistry(eventQueue, "eventQueue");
+    Invader_RegisterEventQueueHandle(eventQueue);  // register event queue for the invader game
 }

@@ -11,7 +11,7 @@
 
 static void gameTask(void *pv);
 static TaskHandle_t gameTaskHandle = NULL;
-static Invader_event_e invader_event = Invader_Event_None; /*< Event set by the debouncing */
+static QueueHandle_t eventQueueHandle = NULL;
 
 void Invader_Init()
 {
@@ -36,21 +36,10 @@ void Invader_Deinit()
 	/* deinitialize */
 }
 
-
-void Invader_SendEvent(Invader_event_e event)
+void Invader_RegisterEventQueueHandle(QueueHandle_t handle)
 {
-	/* this one gets accessed either by the TmrSrv (Debouncing callback) or by the game task */
-	taskENTER_CRITICAL();
-	if (invader_event!=Invader_Event_None)  /* event still pending? */
-	{
-		/* really not ideal to do a delay: a Yield does not work here, as we might be the highest priority task. Wait max for 1 ms, otherwise overwrite event */
-		vTaskDelay(pdMS_TO_TICKS(5));
-		/* other solutions: Bit-Set (but cannot handle multiple set), or yield with a consumer task at the same prio as the producer, or doing a resume of a suspended (high-prio) consumer task */
-	}
-	invader_event = event;
-	taskEXIT_CRITICAL();
+	eventQueueHandle = handle;
 }
-
 
 /*!
  * \brief Task safe way to get invader event
@@ -58,17 +47,14 @@ void Invader_SendEvent(Invader_event_e event)
  */
 static Invader_event_e Invader_RecieveEvent(void)
 {
-	Invader_event_e event;
+	Invader_event_e event = Invader_Event_None;
 
-	if (invader_event==Invader_Event_None)
+	// get event data from queue if it can be reached
+	if(eventQueueHandle != NULL)
 	{
-		return Invader_Event_None;
+		// ignore errors, since it is very well possible that the queue is empty
+		xQueueReceive(eventQueueHandle, &event, pdMS_TO_TICKS(20));
 	}
-	taskENTER_CRITICAL();
-	event = invader_event;
-	invader_event = Invader_Event_None; /* clear event */
-	taskEXIT_CRITICAL();
-
 	return event;
 }
 
