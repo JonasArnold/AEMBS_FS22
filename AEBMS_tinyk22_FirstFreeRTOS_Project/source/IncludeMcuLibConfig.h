@@ -102,5 +102,20 @@ add_compile_options(-include "../config/IncludeMcuLibConfig.h")
 /* #define configHEAP_SECTION_NAME_STRING       ".bss.$SRAM_LOWER.FreeRTOS" */
 /* ------------------- FatFS ---------------------------*/
 #define McuLib_CONFIG_USE_FAT_FS             (0)
+/* ------------------- McuI2cLib and SDK I2C ---------------------------*/
+#define McuLib_CONFIG_MCUI2CLIB_ENABLED                       (1) /* enable McuI2cLib module */
+#define MCUI2CLIB_CONFIG_USE_PORTB_B0_B1                      (1) /* using I2C on B0/B1 */
+#define I2C_RETRY_TIMES                                       (5000) /* set retry count for SDK */
+/* ------------------- McuGenericI2C ---------------------------*/
+#define McuGenericI2C_CONFIG_INTERFACE_HEADER_FILE            "McuI2cLib.h"  /* header file to be used */
+#define McuGenericI2C_CONFIG_RECV_BLOCK                       McuI2cLib_RecvBlock /* callback to receive a block */
+#define McuGenericI2C_CONFIG_SEND_BLOCK                       McuI2cLib_SendBlock /* callback to send a block */
+#if McuGenericI2C_CONFIG_SUPPORT_STOP_NO_START
+#define McuGenericI2C_CONFIG_SEND_BLOCK_CONTINUE              McuI2cLib_SendBlockContinue /* only used if we need to send a STOP without a START, needed for some sensors */
+#endif
+#define McuGenericI2C_CONFIG_SEND_STOP                        McuI2cLib_SendStop /* callback to send a stop condition */
+#define McuGenericI2C_CONFIG_SELECT_SLAVE                     McuI2cLib_SelectSlave /* callback to select a slave address */
+#define McuGenericI2C_CONFIG_RECV_BLOCK_CUSTOM_AVAILABLE      (0)  /* enable if a custom receive block callback shall be defined */
+#define McuGenericI2C_CONFIG_RECV_BLOCK_CUSTOM                McuI2cLib_RecvBlockCustom /* custom receive block callback */
 
 #endif /* INCLUDEMCULIBCONFIG_H_ */

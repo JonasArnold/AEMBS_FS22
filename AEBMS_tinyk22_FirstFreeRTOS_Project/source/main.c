@@ -39,6 +39,7 @@
 #include "clock_config.h"
 #include "MK22F51212.h"
 #include "fsl_debug_console.h"
+#include "fsl_clock.h"
 /* TODO: insert other include files here. */
 #include "leds.h"
 #include "myTasks.h"
@@ -48,6 +49,9 @@
 #include "buttons.h"
 #include "debounce.h"
 #include "Invader.h"
+#include "McuI2cLib.h"
+#include "McuGenericI2C.h"
+#include "McuSHT31.h"
 
 /* TODO: insert other definitions and declarations here. */
 
@@ -68,7 +72,6 @@ int main(void) {
     printf("Hello World\n");
     LEDS_Init();
 
-    //MyTasks_Init();   /* creates some tasks */
     //MyLedTask_Init(); /* creates led task */
 
     printf("Tasks created\n");
@@ -83,6 +86,15 @@ int main(void) {
 
     printf("Invader initialization\n");
     Invader_Init();
+
+    printf("I2C initialization\n");
+    McuGenericI2C_Init();  // initialize generic I2C module
+    CLOCK_EnableClock(kCLOCK_PortB);  // I2C pins on Port B, needed for ResetBus()
+    McuI2cLib_Init();
+
+    printf("SHT31 initialization\n");
+    McuSHT31_Init();
+    MyTasks_Init();   /* creates sht31 task*/
 
     vTaskStartScheduler();
     /* end => nothing else is called from here */

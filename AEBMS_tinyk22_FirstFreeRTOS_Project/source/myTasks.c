@@ -6,45 +6,76 @@
  */
 #include "myTasks.h"
 #include "McuRTOS.h"
+#include "McuSHT31.h"
 #include <stdint.h>
 #include <stdio.h>
 
-static uint32_t taskParameter1 = 5;
-static uint32_t taskParameter2 = 10;
-static TaskHandle_t myTaskHandle = NULL;
+//static uint32_t taskParameter1 = 5;
+//static uint32_t taskParameter2 = 10;
+//static TaskHandle_t myTaskHandle = NULL;
 
-static void myTask(void *pv)
+//static void myTask(void *pv)
+//{
+//	uint32_t param = *(uint32_t*)pv;
+//	printf("myTask param is %d\n", (int)param);
+//	for(;;)
+//	{
+//		taskDISABLE_INTERRUPTS();
+//		__asm volatile("nop");
+//		taskENABLE_INTERRUPTS();
+//		vTaskDelay(pdMS_TO_TICKS(100));
+//	}
+//}
+
+static void sht31Task(void *pv)
 {
-	uint32_t param = *(uint32_t*)pv;
-	printf("myTask param is %d\n", (int)param);
+	float temp = 0.0, humid = 0.0;
 	for(;;)
 	{
 		taskDISABLE_INTERRUPTS();
-		__asm volatile("nop");
+		if(McuSHT31_ReadTempHum(&temp, &humid) != ERR_OK){
+			printf("Some error while reading temperature and humidity from SHT31.");
+		}
 		taskENABLE_INTERRUPTS();
-		vTaskDelay(pdMS_TO_TICKS(100));
+
+		printf("Read from SHT31: Temperature %.2f, Humidity %.2f\n", temp, humid);
+
+		vTaskDelay(pdMS_TO_TICKS(2000));
 	}
 }
+
 
 void MyTasks_Init(void)
 {
 	BaseType_t res;
-	res = xTaskCreate(	myTask,
-						"myTask1",
-						400/sizeof(StackType_t),
-						&taskParameter1,
-						tskIDLE_PRIORITY,
-						&myTaskHandle);
+//	res = xTaskCreate(	myTask,
+//						"myTask1",
+//						400/sizeof(StackType_t),
+//						&taskParameter1,
+//						tskIDLE_PRIORITY,
+//						&myTaskHandle);
+//
+//	if(res != pdPASS) // task creation not successful?
+//	{	// TODO error handling
+//		for(;;) {} // Endless loop
+//	}
+//
+//	res = xTaskCreate(	myTask,
+//						"myTask2",
+//						400/sizeof(StackType_t),
+//						&taskParameter2,
+//						tskIDLE_PRIORITY,
+//						NULL);
+//
+//	if(res != pdPASS) // task creation not successful?
+//	{	// TODO error handling
+//		for(;;) {} // Endless loop
+//	}
 
-	if(res != pdPASS) // task creation not successful?
-	{	// TODO error handling
-		for(;;) {} // Endless loop
-	}
-
-	res = xTaskCreate(	myTask,
-						"myTask2",
-						400/sizeof(StackType_t),
-						&taskParameter2,
+	res = xTaskCreate(	sht31Task,
+						"sht31Task",
+						600/sizeof(StackType_t),
+						NULL,
 						tskIDLE_PRIORITY,
 						NULL);
 
