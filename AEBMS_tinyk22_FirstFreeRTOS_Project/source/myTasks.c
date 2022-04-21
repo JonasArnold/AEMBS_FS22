@@ -36,6 +36,16 @@ static void sht31Task(void *pv)
 			printf("Some error while reading temperature and humidity from SHT31.");
 		}
 
+		// does not work !! float takes very much stack space
+//		printf("Read from SHT31: Temperature %.2f, Humidity %.2f\n", temp, humid);
+
+		// Solution with McuUtility (untested)
+//		char tempString[10], humidString[10];
+//		McuUtility_NumFloatToStr(tempString, sizeof(tempString), temp, 2);
+//		McuUtility_NumFloatToStr(humidString, sizeof(humidString), humid, 2);
+//		printf("Read from SHT31: Temperature %.2f, Humidity %.2f\n", temp, humid);
+
+		// simplest solution
 		printf("Read from SHT31: Temperature %d, Humidity %d\n", (int)(temp*10), (int)(humid*10));
 
 		vTaskDelay(pdMS_TO_TICKS(2000));
