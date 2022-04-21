@@ -25,6 +25,12 @@ void Debounce_StartDebounce(uint32_t buttons);
 void Debounce_StartDebounceFromISR(uint32_t buttons, BaseType_t *pxHigherPriorityTaskWoken);
 
 /*!
+ * Returns the event queue handle.
+ * Button events will be written to this FIFO queue.
+ */
+QueueHandle_t Debounce_GetEventQueueHandle(void);
+
+/*!
  * Module de-initialization
  */
 void Debounce_Deinit(void);

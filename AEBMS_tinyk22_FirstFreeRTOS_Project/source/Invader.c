@@ -8,6 +8,7 @@
 #include "McuRTOS.h"
 #include "leds.h"
 #include <stdio.h>
+#include "debounce.h"
 
 static void gameTask(void *pv);
 static TaskHandle_t gameTaskHandle = NULL;
@@ -29,16 +30,14 @@ void Invader_Init()
 		printf("Creating invader task failed");
 		for(;;) {} // Endless loop
 	}
+
+	// get the event queue handle from debounce
+	eventQueueHandle = Debounce_GetEventQueueHandle();
 }
 
 void Invader_Deinit()
 {
 	/* deinitialize */
-}
-
-void Invader_RegisterEventQueueHandle(QueueHandle_t handle)
-{
-	eventQueueHandle = handle;
 }
 
 /*!

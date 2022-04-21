@@ -48,10 +48,5 @@ void Invader_Init(void);
  */
 void Invader_Deinit(void);
 
-/*!
- * \brief Register event queue handle for the game.
- */
-void Invader_RegisterEventQueueHandle(QueueHandle_t handle);
-
 
 #endif /* INVADER_H_ */

@@ -155,6 +155,10 @@ void Debounce_StartDebounceFromISR(uint32_t buttons, BaseType_t *pxHigherPriorit
   }
 }
 
+QueueHandle_t Debounce_GetEventQueueHandle() {
+	return eventQueue;
+}
+
 void Debounce_Deinit(void) {
   /* nothing needed */
 }
@@ -179,5 +183,4 @@ void Debounce_Init(void) {
     	for(;;); /* out of memory? */
     }
     vQueueAddToRegistry(eventQueue, "eventQueue");
-    Invader_RegisterEventQueueHandle(eventQueue);  // register event queue for the invader game
 }

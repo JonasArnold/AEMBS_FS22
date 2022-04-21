@@ -29,16 +29,14 @@
 
 static void sht31Task(void *pv)
 {
-	float temp = 0.0, humid = 0.0;
+	float temp = 0.0f, humid = 0.0f;
 	for(;;)
 	{
-		taskDISABLE_INTERRUPTS();
 		if(McuSHT31_ReadTempHum(&temp, &humid) != ERR_OK){
 			printf("Some error while reading temperature and humidity from SHT31.");
 		}
-		taskENABLE_INTERRUPTS();
 
-		printf("Read from SHT31: Temperature %.2f, Humidity %.2f\n", temp, humid);
+		printf("Read from SHT31: Temperature %d, Humidity %d\n", (int)(temp*10), (int)(humid*10));
 
 		vTaskDelay(pdMS_TO_TICKS(2000));
 	}
