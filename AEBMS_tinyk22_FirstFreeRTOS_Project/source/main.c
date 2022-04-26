@@ -52,6 +52,7 @@
 #include "McuI2cLib.h"
 #include "McuGenericI2C.h"
 #include "McuSHT31.h"
+#include "sensor.h"
 
 /* TODO: insert other definitions and declarations here. */
 
@@ -94,8 +95,9 @@ int main(void) {
 
     printf("SHT31 initialization\n");
     McuSHT31_Init();
-    MyTasks_Init();   /* creates sht31 task*/
+    Sensor_Init(); // creates sht31 task
 
+    MyTasks_Init();
     vTaskStartScheduler();
     /* end => nothing else is called from here */
 
