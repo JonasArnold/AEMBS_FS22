@@ -24,7 +24,7 @@ static const uint8_t pixData[] = {
 static const TIMAGE image = {
   .width = 10, /* number from converted file: .header.w */
   .height = 10, /* number from converted file: .header.h */
-  .size = sizeof(pixData), /* size of bitmap data
+  .size = sizeof(pixData), /* size of bitmap data */
   .pixmap = pixData, /* pointer to bitmap data above */
   .name = "face.bmp", /* optional name of file */
 };

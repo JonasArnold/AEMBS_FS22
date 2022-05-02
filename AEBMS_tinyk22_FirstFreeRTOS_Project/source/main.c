@@ -53,6 +53,7 @@
 #include "McuGenericI2C.h"
 #include "McuSHT31.h"
 #include "sensor.h"
+#include "display.h"
 
 /* TODO: insert other definitions and declarations here. */
 
@@ -70,12 +71,8 @@ int main(void) {
     BOARD_InitDebugConsole();
 #endif
 
-    printf("Hello World\n");
+    printf("Program Started\n");
     LEDS_Init();
-
-    //MyLedTask_Init(); /* creates led task */
-
-    printf("Tasks created\n");
 
     printf("System Viewer initialization\n");
     mySystemView_Init();
@@ -85,9 +82,6 @@ int main(void) {
     BTN_Init();
     Debounce_Init();
 
-    printf("Invader initialization\n");
-    Invader_Init();
-
     printf("I2C initialization\n");
     McuGenericI2C_Init();  // initialize generic I2C module
     CLOCK_EnableClock(kCLOCK_PortB);  // I2C pins on Port B, needed for ResetBus()
@@ -96,6 +90,9 @@ int main(void) {
     printf("SHT31 initialization\n");
     McuSHT31_Init();
     Sensor_Init(); // creates sht31 task
+
+    printf("Invader initialization\n");
+    Invader_Init();
 
     MyTasks_Init();
     vTaskStartScheduler();

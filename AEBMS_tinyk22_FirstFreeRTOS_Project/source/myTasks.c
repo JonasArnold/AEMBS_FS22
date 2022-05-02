@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "sensor.h"
+#include "display.h"
 
 //static uint32_t taskParameter1 = 5;
 //static uint32_t taskParameter2 = 10;
@@ -38,6 +39,9 @@ static void sensorPrintTask(void *pv)
 
 		// print
 		printf("Read from Sensor: Temperature %d, Humidity %d\n", (int)(temp*10), (int)(humid*10));
+
+		// show on display
+		// Display_ShowSensorTemperature(temp);
 
 		vTaskDelay(pdMS_TO_TICKS(2000));
 	}

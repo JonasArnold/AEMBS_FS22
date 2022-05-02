@@ -38,6 +38,16 @@ typedef enum Invader_event_e {
   Invader_Button_Center_Released,
 } Invader_event_e;
 
+
+typedef enum Invader_state_e {
+	Invader_State_Unknown,
+
+	Invader_State_Intro,
+	Invader_State_Running,
+	Invader_State_Ended,
+} Invader_state_e;
+
+
 /*!
  * \brief Module de-initialization
  */

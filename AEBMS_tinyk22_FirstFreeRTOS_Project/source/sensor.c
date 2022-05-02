@@ -15,20 +15,16 @@
 static float temp = 0.0f, humid = 0.0f;
 
 // task that reads temperature and humidity once a second
-static void sht31Task(void *pv)
-{
-	for(;;)
-	{
-		if(I2CBus_Lock() == false)
-		{
-			printf("Timeout when locking I2CBus!");
+static void sht31Task(void *pv){
+	for(;;)	{
+		if(I2CBus_Lock() == false){
+			printf("Timeout when locking I2CBus!\n");
 		}
-		else
-		{
-			// locked successfully => read from bus
+		else{   // locked successfully => read from bus
 			if(McuSHT31_ReadTempHum(&temp, &humid) != ERR_OK){
-				printf("Some error while reading temperature and humidity from SHT31.");
+				printf("Some error while reading temperature and humidity from SHT31.\n");
 			}
+
 			I2CBus_Unlock();
 		}
 
@@ -46,8 +42,7 @@ void Sensor_Init(void){
 									tskIDLE_PRIORITY,
 									NULL);
 
-	if(res != pdPASS) // task creation not successful?
-	{
+	if(res != pdPASS){ // task creation not successful?
 		printf("Some error while creating sensor task in Sensor_Init().");
 		for(;;) {} // Endless loop
 	}

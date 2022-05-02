@@ -117,5 +117,9 @@ add_compile_options(-include "../config/IncludeMcuLibConfig.h")
 #define McuGenericI2C_CONFIG_SELECT_SLAVE                     McuI2cLib_SelectSlave /* callback to select a slave address */
 #define McuGenericI2C_CONFIG_RECV_BLOCK_CUSTOM_AVAILABLE      (0)  /* enable if a custom receive block callback shall be defined */
 #define McuGenericI2C_CONFIG_RECV_BLOCK_CUSTOM                McuI2cLib_RecvBlockCustom /* custom receive block callback */
+/* ------------------- McuSSD1306 ---------------------------*/
+#define McuSSD1306_CONFIG_SSD1306_DRIVER_TYPE   		      (1106)
+#define McuSSD1306_CONFIG_FIXED_DISPLAY_ORIENTATION    	      McuSSD1306_CONFIG_ORIENTATION_LANDSCAPE
 
 #endif /* INCLUDEMCULIBCONFIG_H_ */
+
