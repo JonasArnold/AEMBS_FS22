@@ -100,6 +100,12 @@ void InvaderGraphics_MoveShip(Ship_MoveDirection_e direction){
 		case Ship_MoveDir_Right:
 			Sprite_MoveLimited(ship, 5, 0, 0, McuGDisplaySSD1306_GetWidth(), 0, McuGDisplaySSD1306_GetHeight());
 			break;
+		case Ship_MoveDir_Down:
+			Sprite_MoveLimited(ship, 0, 5, 0, McuGDisplaySSD1306_GetWidth(), 0, McuGDisplaySSD1306_GetHeight());
+			break;
+		case Ship_MoveDir_Up:
+			Sprite_MoveLimited(ship, 0, -5, 0, McuGDisplaySSD1306_GetWidth(), 0, McuGDisplaySSD1306_GetHeight());
+			break;
 		case Ship_MoveDir_Unknown:
 		default:
 			break;

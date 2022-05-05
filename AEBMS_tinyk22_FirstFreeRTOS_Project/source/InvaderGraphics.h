@@ -13,6 +13,8 @@ typedef enum Ship_MoveDirection_e {
 
 	Ship_MoveDir_Left,
 	Ship_MoveDir_Right,
+	Ship_MoveDir_Up,
+	Ship_MoveDir_Down,
 } Ship_MoveDirection_e;
 
 /* module initialization */
