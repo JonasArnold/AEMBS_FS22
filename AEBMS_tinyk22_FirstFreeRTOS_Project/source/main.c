@@ -94,6 +94,10 @@ int main(void) {
     printf("Invader initialization\n");
     Invader_Init();
 
+    // draw smiley
+    //Display_Init();
+    //Display_DrawSmiley();
+
     MyTasks_Init();
     vTaskStartScheduler();
     /* end => nothing else is called from here */

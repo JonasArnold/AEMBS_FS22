@@ -14,6 +14,7 @@
 #include "McuFontHelv10Normal.h"
 #include "McuFontHelv18Bold.h"
 #include "i2cbus.h"
+#include "images/smiley.h"
 #include <stdio.h>
 
 void Display_Init(void){
@@ -49,6 +50,13 @@ void Display_Clear(void){
 void Display_DrawRectangle(void){
 	McuGDisplaySSD1306_Clear();
 	McuGDisplaySSD1306_DrawBox(0, 0, McuGDisplaySSD1306_GetWidth()-1, McuGDisplaySSD1306_GetHeight()-1, 1, McuGDisplaySSD1306_COLOR_WHITE);
+	Display_UpdateView();
+}
+
+void Display_DrawSmiley(void){
+	McuGDisplaySSD1306_Clear();
+	PIMAGE smiley = Smiley_GetImage();
+    McuGDisplaySSD1306_DrawMonoBitmap(0, 0, smiley, McuGDisplaySSD1306_COLOR_WHITE, McuGDisplaySSD1306_COLOR_BLACK);
 	Display_UpdateView();
 }
 

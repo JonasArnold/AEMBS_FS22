@@ -16,6 +16,8 @@ static void gameTask(void *pv);
 static TaskHandle_t gameTaskHandle = NULL;
 static QueueHandle_t eventQueueHandle = NULL;
 static Invader_state_e gameState = Invader_State_Unknown;
+static uint32_t callCounter = 0;
+static const uint32_t c_callsBetweenAlienMissiles = 30;
 
 void Invader_Init()
 {
@@ -23,7 +25,7 @@ void Invader_Init()
 	BaseType_t res;
 	res = xTaskCreate(	gameTask,
 						"gameTask",
-						600/sizeof(StackType_t),
+						1000/sizeof(StackType_t),
 						NULL,
 						tskIDLE_PRIORITY+1,
 						&gameTaskHandle);
@@ -79,9 +81,11 @@ static void gameTask(void *pv)
 		/* handle game State */
 		switch (gameState) {
 			case Invader_State_Intro:
-				// switch state since a button was pressed
-				if(event != Invader_Event_None){
+				// switch state since the button was pressed
+				if(event == Invader_Button_Center_Pressed){
 					InvaderGraphics_Clear();
+					InvaderGraphics_DrawNewGame();
+					callCounter = 0;
 					gameState = Invader_State_Running;
 				}
 				break;
@@ -115,17 +119,40 @@ static void gameTask(void *pv)
 					}
 				}
 
-				InvaderGraphics_UpdateView();
+				// generate a missle towards the ship if the last one is > c_timeBetweenAlienMissilesMS ago
+				if(callCounter > c_callsBetweenAlienMissiles)
+				{
+					callCounter = 0;  // reset counter
+					InvaderGraphics_GenerateAlienMissile();	// launch missile
+				}
+				callCounter++;
+
+				// update view and check result
+				UpdateView_Result_e result = InvaderGraphics_UpdateView();
+				if(result == UpdateView_Result_CollisionWithShip){
+					InvaderGraphics_ShowEnded(false);
+					gameState = Invader_State_Ended_Lost;
+				}
+				if(result == UpdateView_Result_NoMoreAliens){
+					InvaderGraphics_ShowEnded(true);
+					gameState = Invader_State_Ended_Won;
+				}
 				break;
 
-			case Invader_State_Ended:
-				/* TODO */
+			case Invader_State_Ended_Lost:
+			case Invader_State_Ended_Won:
+				// switch state since a button was pressed
+				if(event == Invader_Button_Center_Pressed){
+					InvaderGraphics_Clear();
+					InvaderGraphics_ShowIntro();
+					gameState = Invader_State_Intro;
+				}
 				break;
 
 		    case Invader_State_Unknown:
 			default:
-				gameState = Invader_State_Intro;
 				InvaderGraphics_ShowIntro();
+				gameState = Invader_State_Intro;
 				break;
 		}
 

@@ -44,7 +44,8 @@ typedef enum Invader_state_e {
 
 	Invader_State_Intro,
 	Invader_State_Running,
-	Invader_State_Ended,
+	Invader_State_Ended_Lost,
+	Invader_State_Ended_Won,
 } Invader_state_e;
 
 

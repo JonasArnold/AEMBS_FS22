@@ -18,6 +18,7 @@ void Display_Deinit(void);
 void Display_UpdateView(void);
 void Display_Clear(void);
 void Display_DrawRectangle(void);
+void Display_DrawSmiley(void);
 void Display_DrawCircle(void);
 void Display_ShowSensorTemperature(float value);
 void Display_ShowGameIntro(void);
