@@ -284,7 +284,9 @@ static void CheckSpriteCollision(Sprite_t **spriteList, Sprite_t **targetList) {
 		Sprite_UnlinkFromList(spriteList, sprite); /* temporarily, remove current sprite from list, will be re-added later */
 		if (!SpriteCollidedWithTarget(sprite, targetList)) { /* no hit and? Otherwise it is marked for deletion */
 			Sprite_AddToList(&newList, sprite); /* add to temporary list */
-		}
+		} else { /* sprite hit target: free sprite */
+            Sprite_FreeSprite(sprite);
+        }
 		sprite = next; /* next in list */
 	} /* while */
 	*spriteList = newList; /* restore list */
