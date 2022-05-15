@@ -1,0 +1,1 @@
+scp -r ./* pi@eee-01852.local:/home/pi/AEMBS
