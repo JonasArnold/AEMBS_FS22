@@ -1,0 +1,7 @@
+ExitOnError 1
+r
+h
+loadfile "C:\Users\jonas\OneDrive\HSLU\Semester6\AEMBS\Unterlagen\SW\SW03\tinyK22_HAT_V6.hex"
+qc
+
+qc
